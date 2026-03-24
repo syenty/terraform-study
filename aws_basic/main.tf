@@ -57,8 +57,8 @@ resource "aws_security_group" "ec2" {
 
   ingress {
     description     = "Allow traffic from ALB"
-    from_port       = 80
-    to_port         = 80
+    from_port       = 8080
+    to_port         = 8080
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
@@ -97,7 +97,7 @@ resource "aws_instance" "app" {
 
 resource "aws_lb_target_group" "app" {
   name     = "${var.project_name}-tg"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.default.id
 
@@ -116,7 +116,7 @@ resource "aws_lb_target_group" "app" {
 resource "aws_lb_target_group_attachment" "app" {
   target_group_arn = aws_lb_target_group.app.arn
   target_id        = aws_instance.app.id
-  port             = 80
+  port             = 8080
 }
 
 # -----------------------------------------------
