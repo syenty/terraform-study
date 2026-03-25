@@ -10,7 +10,7 @@ output "app_url" {
 
 output "bastion_public_ip" {
   description = "Bastion 인스턴스 퍼블릭 IP"
-  value       = aws_instance.bastion.public_ip
+  value       = aws_eip.bastion.public_ip
 }
 
 output "instance_id" {
