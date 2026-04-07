@@ -4,8 +4,8 @@ output "alb_dns_name" {
 }
 
 output "app_url" {
-  description = "애플리케이션 접속 URL"
-  value       = "https://${var.subdomain}.${var.domain_name}"
+  description = "애플리케이션 접속 URL (ALB DNS)"
+  value       = "http://${aws_lb.app.dns_name}"
 }
 
 output "instance_id" {
@@ -16,4 +16,9 @@ output "instance_id" {
 output "instance_private_ip" {
   description = "EC2 프라이빗 IP"
   value       = aws_instance.app.private_ip
+}
+
+output "instance_public_ip" {
+  description = "EC2 퍼블릭 IP (SSH 접속용)"
+  value       = aws_instance.app.public_ip
 }

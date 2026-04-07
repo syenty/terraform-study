@@ -9,7 +9,6 @@ variable "project_name" {
   type        = string
 }
 
-
 variable "ami_id" {
   description = "EC2 AMI ID"
   type        = string
@@ -26,13 +25,8 @@ variable "key_name" {
   type        = string
 }
 
-variable "domain_name" {
-  description = "Route53에 등록된 도메인 이름 (예: example.com)"
+variable "my_ip" {
+  description = "SSH 허용할 IP (예: 1.2.3.4/32). 기본값은 전체 허용"
   type        = string
-}
-
-variable "subdomain" {
-  description = "사용할 서브도메인 (예: app → app.example.com)"
-  type        = string
-  default     = "app"
+  default     = "0.0.0.0/0"
 }

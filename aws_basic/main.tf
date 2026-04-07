@@ -30,14 +30,6 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "HTTPS"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -63,6 +55,14 @@ resource "aws_security_group" "ec2" {
     security_groups = [aws_security_group.alb.id]
   }
 
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.my_ip]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -80,11 +80,12 @@ resource "aws_security_group" "ec2" {
 # -----------------------------------------------
 
 resource "aws_instance" "app" {
-  ami                    = var.ami_id
-  instance_type          = var.instance_type
-  subnet_id              = data.aws_subnets.default.ids[0]
-  vpc_security_group_ids = [aws_security_group.ec2.id]
-  key_name               = var.key_name
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  subnet_id                   = data.aws_subnets.default.ids[0]
+  vpc_security_group_ids      = [aws_security_group.ec2.id]
+  key_name                    = var.key_name
+  associate_public_ip_address = true
 
   tags = {
     Name = "${var.project_name}-app"
@@ -139,92 +140,13 @@ resource "aws_lb" "app" {
 # Listeners & Routing
 # -----------------------------------------------
 
-# HTTP → HTTPS 리다이렉트
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.app.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
-# HTTPS 리스너 → 대상그룹으로 포워딩
-resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.app.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = aws_acm_certificate_validation.app.certificate_arn
-
-  default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app.arn
-  }
-}
-
-# -----------------------------------------------
-# ACM Certificate
-# -----------------------------------------------
-
-resource "aws_acm_certificate" "app" {
-  domain_name       = "${var.subdomain}.${var.domain_name}"
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tags = {
-    Name = "${var.project_name}-cert"
-  }
-}
-
-resource "aws_route53_record" "cert_validation" {
-  for_each = {
-    for dvo in aws_acm_certificate.app.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    }
-  }
-
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = each.value.name
-  type    = each.value.type
-  records = [each.value.record]
-  ttl     = 60
-}
-
-resource "aws_acm_certificate_validation" "app" {
-  certificate_arn         = aws_acm_certificate.app.arn
-  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
-}
-
-# -----------------------------------------------
-# Route53
-# -----------------------------------------------
-
-data "aws_route53_zone" "main" {
-  name         = var.domain_name
-  private_zone = false
-}
-
-resource "aws_route53_record" "app" {
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = "${var.subdomain}.${var.domain_name}"
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.app.dns_name
-    zone_id                = aws_lb.app.zone_id
-    evaluate_target_health = true
   }
 }

@@ -42,7 +42,23 @@ terraform apply
 terraform destroy
 ```
 
+## 5. SSH IP 설정
+
+작업 장소가 바뀌면 내 IP를 확인하고 `terraform.tfvars`에 반영한 후 `terraform apply`:
+
+```bash
+# 현재 IP 확인
+curl ifconfig.me
+```
+
+```hcl
+# terraform.tfvars
+my_ip = "확인한IP/32"
+```
+
+> `my_ip` 기본값은 `0.0.0.0/0` (전체 허용). 보안을 위해 작업 전 본인 IP로 변경 권장
+
 ## 참고
 
 - 새 디렉토리 추가 시 `provider` 블록에 `profile = "terraform-study"` 반드시 포함
-- `terraform.tfvars`에 필수 변수(`project_name`, `ami_id`, `key_name`, `domain_name`) 입력 필요
+- `terraform.tfvars`에 필수 변수(`project_name`, `ami_id`, `key_name`) 입력 필요
