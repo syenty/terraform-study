@@ -5,10 +5,6 @@ aws_region   = "ap-northeast-2"
 vpc_cidr = "10.0.0.0/16"
 
 # EC2 설정
-ami_id        = "ami-0c9c942bd7bf113a2" # Amazon Linux 2023 (ap-northeast-2)
+ami_id        = "ami-00b3401e969d06397" # Amazon Linux 2023 kernel-6.1 x86_64 (ap-northeast-2)
 instance_type = "t3.micro"
-key_name      = "my-key-pair"
-
-# 도메인 설정 (Route53에 등록된 도메인)
-domain_name = "example.com"
-subdomain   = "app"
+key_name      = "terraform-study-key"

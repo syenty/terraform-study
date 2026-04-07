@@ -4,12 +4,12 @@ output "alb_dns_name" {
 }
 
 output "app_url" {
-  description = "애플리케이션 접속 URL"
-  value       = "https://${var.subdomain}.${var.domain_name}"
+  description = "애플리케이션 접속 URL (ALB DNS)"
+  value       = "http://${aws_lb.app.dns_name}"
 }
 
 output "bastion_public_ip" {
-  description = "Bastion 인스턴스 퍼블릭 IP"
+  description = "Bastion 인스턴스 퍼블릭 IP (SSH 접속용)"
   value       = aws_eip.bastion.public_ip
 }
 
