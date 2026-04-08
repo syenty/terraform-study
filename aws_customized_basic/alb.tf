@@ -21,8 +21,9 @@ resource "aws_lb_target_group" "app" {
 }
 
 resource "aws_lb_target_group_attachment" "app" {
+  count            = 2
   target_group_arn = aws_lb_target_group.app.arn
-  target_id        = aws_instance.app.id
+  target_id        = aws_instance.app[count.index].id
   port             = 8080
 }
 
@@ -35,7 +36,7 @@ resource "aws_lb" "app" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets            = [aws_subnet.public.id]
+  subnets            = aws_subnet.public[*].id
 
   tags = {
     Name = "${var.project_name}-alb"

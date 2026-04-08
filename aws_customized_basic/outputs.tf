@@ -13,12 +13,12 @@ output "bastion_public_ip" {
   value       = aws_eip.bastion.public_ip
 }
 
-output "instance_id" {
-  description = "App EC2 인스턴스 ID"
-  value       = aws_instance.app.id
+output "instance_ids" {
+  description = "App EC2 인스턴스 ID 목록"
+  value       = aws_instance.app[*].id
 }
 
-output "instance_private_ip" {
-  description = "App EC2 프라이빗 IP"
-  value       = aws_instance.app.private_ip
+output "instance_private_ips" {
+  description = "App EC2 프라이빗 IP 목록"
+  value       = aws_instance.app[*].private_ip
 }
