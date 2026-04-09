@@ -79,6 +79,12 @@ resource "aws_iam_policy" "dev" {
           "ssmmessages:*"
         ]
         Resource = "*"
+        Condition = {
+          StringEquals = {
+            "ssm:resourceTag/${module.tags.tag_keys.env}"   = "dev"
+            "ssm:resourceTag/${module.tags.tag_keys.owner}" = "dev"
+          }
+        }
       },
       {
         Sid    = "EC2ReadOnly"

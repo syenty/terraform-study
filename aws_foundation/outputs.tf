@@ -37,3 +37,18 @@ output "ec2_ssm_instance_profile_arn" {
   description = "EC2 SSM Instance Profile ARN"
   value       = aws_iam_instance_profile.ec2_ssm.arn
 }
+
+output "tag_keys" {
+  description = "공통 태그 키 목록"
+  value       = module.tags.tag_keys
+}
+
+output "valid_envs" {
+  description = "유효한 Env 태그 값 목록"
+  value       = module.tags.valid_envs
+}
+
+output "valid_owners" {
+  description = "유효한 Owner 태그 값 목록"
+  value       = module.tags.valid_owners
+}
