@@ -4,8 +4,8 @@
 # -----------------------------------------------
 
 resource "aws_iam_role" "ec2_ssm" {
-  name        = "${var.project_name}-ec2-ssm-role"
-  description = "EC2 인스턴스용 SSM 접근 Role"
+  name        = "${var.org}-ec2-ssm-role"
+  description = "SSM access role for EC2 instances"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -21,7 +21,7 @@ resource "aws_iam_role" "ec2_ssm" {
   })
 
   tags = {
-    Name = "${var.project_name}-ec2-ssm-role"
+    Name = "${var.org}-ec2-ssm-role"
   }
 }
 
@@ -31,6 +31,6 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm" {
 }
 
 resource "aws_iam_instance_profile" "ec2_ssm" {
-  name = "${var.project_name}-ec2-ssm-profile"
+  name = "${var.org}-ec2-ssm-profile"
   role = aws_iam_role.ec2_ssm.name
 }

@@ -3,7 +3,7 @@
 # -----------------------------------------------
 
 resource "aws_iam_group" "devops" {
-  name = "${var.project_name}-devops"
+  name = "${var.org}-devops"
 }
 
 resource "aws_iam_group_policy_attachment" "devops" {
@@ -16,7 +16,7 @@ resource "aws_iam_group_policy_attachment" "devops" {
 # -----------------------------------------------
 
 resource "aws_iam_group" "dev" {
-  name = "${var.project_name}-dev"
+  name = "${var.org}-dev"
 }
 
 resource "aws_iam_group_policy_attachment" "dev" {
@@ -29,7 +29,7 @@ resource "aws_iam_group_policy_attachment" "dev" {
 # -----------------------------------------------
 
 resource "aws_iam_group" "readonly" {
-  name = "${var.project_name}-readonly"
+  name = "${var.org}-readonly"
 }
 
 resource "aws_iam_group_policy_attachment" "readonly" {

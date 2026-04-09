@@ -3,8 +3,8 @@
 # -----------------------------------------------
 
 resource "aws_iam_policy" "devops" {
-  name        = "${var.project_name}-devops-policy"
-  description = "인프라 관리자 권한 (EC2, VPC, ALB, CloudWatch 등)"
+  name        = "${var.org}-devops-policy"
+  description = "DevOps policy for infrastructure management (EC2, VPC, ALB, CloudWatch, etc.)"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -60,8 +60,8 @@ resource "aws_iam_policy" "devops" {
 # -----------------------------------------------
 
 resource "aws_iam_policy" "dev" {
-  name        = "${var.project_name}-dev-policy"
-  description = "개발자 권한 (SSM 접속, 로그 조회, S3, ECR)"
+  name        = "${var.org}-dev-policy"
+  description = "Dev policy for SSM access, CloudWatch, S3, and ECR"
 
   policy = jsonencode({
     Version = "2012-10-17"
