@@ -38,6 +38,21 @@ output "ec2_ssm_instance_profile_arn" {
   value       = aws_iam_instance_profile.ec2_ssm.arn
 }
 
+output "cloudwatch_agent_instance_profile_name" {
+  description = "CloudWatch Agent Instance Profile 이름"
+  value       = aws_iam_instance_profile.cloudwatch_agent.name
+}
+
+output "cloudwatch_agent_instance_profile_arn" {
+  description = "CloudWatch Agent Instance Profile ARN"
+  value       = aws_iam_instance_profile.cloudwatch_agent.arn
+}
+
+output "ecs_task_execution_role_arn" {
+  description = "ECS Task Execution Role ARN"
+  value       = aws_iam_role.ecs_task_execution.arn
+}
+
 output "tag_keys" {
   description = "공통 태그 키 목록"
   value       = module.tags.tag_keys
