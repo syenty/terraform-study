@@ -7,9 +7,9 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-vpc"
-  }
+  })
 }
 
 # -----------------------------------------------
@@ -23,9 +23,9 @@ resource "aws_subnet" "public" {
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-public-${count.index + 1}"
-  }
+  })
 }
 
 resource "aws_subnet" "private" {
@@ -34,9 +34,9 @@ resource "aws_subnet" "private" {
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 11)
   availability_zone = var.availability_zones[count.index]
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-private-${count.index + 1}"
-  }
+  })
 }
 
 # -----------------------------------------------
@@ -46,9 +46,9 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-igw"
-  }
+  })
 }
 
 # -----------------------------------------------
@@ -58,18 +58,18 @@ resource "aws_internet_gateway" "main" {
 resource "aws_eip" "nat" {
   domain = "vpc"
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-nat-eip"
-  }
+  })
 }
 
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-nat-gw"
-  }
+  })
 
   depends_on = [aws_internet_gateway.main]
 }
@@ -86,9 +86,9 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.main.id
   }
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-public-rt"
-  }
+  })
 }
 
 resource "aws_route_table_association" "public" {
@@ -105,9 +105,9 @@ resource "aws_route_table" "private" {
     nat_gateway_id = aws_nat_gateway.main.id
   }
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-private-rt"
-  }
+  })
 }
 
 resource "aws_route_table_association" "private" {

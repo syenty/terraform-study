@@ -22,9 +22,9 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-alb-sg"
-  }
+  })
 }
 
 # -----------------------------------------------
@@ -51,7 +51,7 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-ec2-sg"
-  }
+  })
 }

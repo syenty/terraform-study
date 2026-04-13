@@ -8,7 +8,7 @@ resource "aws_launch_template" "app" {
   instance_type = var.instance_type
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ssm.name
+    name = var.ec2_instance_profile_name
   }
 
   network_interfaces {
@@ -18,9 +18,9 @@ resource "aws_launch_template" "app" {
 
   tag_specifications {
     resource_type = "instance"
-    tags = {
+    tags = merge(module.tags.common_tags, {
       Name = "${var.project_name}-app"
-    }
+    })
   }
 
   lifecycle {

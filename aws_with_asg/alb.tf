@@ -15,9 +15,9 @@ resource "aws_lb_target_group" "app" {
     interval            = 30
   }
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-tg"
-  }
+  })
 }
 
 # -----------------------------------------------
@@ -31,9 +31,9 @@ resource "aws_lb" "app" {
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
-  tags = {
+  tags = merge(module.tags.common_tags, {
     Name = "${var.project_name}-alb"
-  }
+  })
 }
 
 # -----------------------------------------------

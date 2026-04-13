@@ -61,3 +61,21 @@ variable "scale_in_cpu_threshold" {
   type        = number
   default     = 30
 }
+
+variable "ec2_instance_profile_name" {
+  description = "EC2에 부착할 Instance Profile 이름 (aws_foundation에서 생성)"
+  type        = string
+  default     = "sdt-ec2-ssm-profile"
+}
+
+variable "env" {
+  description = "환경 (dev 또는 prod)"
+  type        = string
+  default     = "dev"
+}
+
+variable "owner" {
+  description = "소유 팀 (devops, dev, readonly)"
+  type        = string
+  default     = "devops"
+}
