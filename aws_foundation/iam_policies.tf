@@ -82,7 +82,7 @@ resource "aws_iam_policy" "dev" {
         Condition = {
           StringEquals = {
             "ssm:resourceTag/${module.tags.tag_keys.env}"   = "dev"
-            "ssm:resourceTag/${module.tags.tag_keys.owner}" = "dev"
+            "ssm:resourceTag/${module.tags.tag_keys.owner}" = ["dev", "devops"]
           }
         }
       },
